@@ -1,0 +1,70 @@
+#!/usr/bin/perl
+# Author: T. Nelson Hillyer
+#
+use strict;
+
+die "ERROR! Usage: imagenode <e|d> <hostname>\n" unless $#ARGV ge 1;
+my $change = 0;
+my $op = shift @ARGV;
+die "ERROR! Operation \"$op\" is not valid!\ne = enable, d = disable\n" if $op ne "e" and $op ne "d";
+
+open HOSTS, "</etc/dhcp3/hosts.conf";
+open HOSTSSWP, ">/etc/dhcp3/hosts.conf.bak";
+my @hosts = <HOSTS>;
+close HOSTS;
+chomp @hosts;
+
+for (@hosts) {
+	print HOSTSSWP "$_\n";
+}
+close HOSTSSWP;
+
+for my $host (@ARGV) {
+	for (my $i = 0; $i <= $#hosts; $i++) {
+		my $_ = $hosts[$i];
+
+		if (/.*host\s+$host.*/) {
+			for ( ; $i <= $#hosts; $i++) {
+				my $_ = $hosts[$i];
+				if (/.*\}/) {
+					print STDERR "ERROR! Host \"$host\" does not have imaging filename!\n";
+					last;
+				}
+				if (/(\s*)([#]?filename)(\s+\".*)$/) {
+					if ($op eq "d") {
+						if ($2 eq "filename") {
+							$hosts[$i] = "${1}#filename$3";
+							$change = 1;
+						}
+					}
+					elsif ($op eq "e") {
+						if ($2 eq "#filename") {
+							$hosts[$i] = "${1}filename$3";
+							$change = 1;
+						}
+					}
+					last;
+				}
+			}
+			last;
+		}
+		if ($i == $#hosts) {
+			print STDERR "ERROR! Host \"$host\" not found in hosts.conf!\n";
+		}
+	}
+}
+
+open HOSTS, ">/etc/dhcp3/hosts.conf";
+for (@hosts) {
+	print HOSTS "$_\n";
+}
+close HOSTS;
+
+unlink "/etc/dhcp3/hosts.conf.bak";
+
+if ($change eq 1) {
+	print "Restarting DHCP3 Server..........\n";
+	system("/etc/init.d/dhcp3-server restart");
+}
+
+print "DONE!\n";
