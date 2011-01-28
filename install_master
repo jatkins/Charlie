@@ -1,3 +1,10 @@
 #!/bin/bash
+
+#VARS
 declare -a NTP_SERVERS=('ntp1.vt.edu' 'ntp2.vt.edu' 'ntp3.vt.edu' 'ntp4.vt.ed')
 
+###############################################################################
+
+apt-get -q update
+apt-get -qy upgrade
+apt-get -qy install nfs-common nfs-kernel-server dhcp3-server slapd libnss-ldap libpam-ldap bind9
