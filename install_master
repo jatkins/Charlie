@@ -1,0 +1,3 @@
+#!/bin/bash
+declare -a NTP_SERVERS=('ntp1.vt.edu' 'ntp2.vt.edu' 'ntp3.vt.edu' 'ntp4.vt.ed')
+
