@@ -5,19 +5,19 @@ use-host-decl-names on;
 allow booting;
 allow bootp;
 
-option domain-name-servers 0.0.0.0 0.0.0.0 0.0.0.0;
+option domain-name-servers _DNS_;
 default-lease-time 14400;
 max-lease-time 14400;
-option routers 192.168.0.1;
+option routers _ROUTER_;
 
-subnet 192.168.0.0 netmask 255.255.255.0 {
-	option domain-name "cluser.domain.tld";
-	option ntp-servers 192.168.0.1;
+subnet _SUBNET_ netmask 255.255.255.0 {
+	option domain-name "_DOMAIN_NAME_";
+	option ntp-servers _NTP_;
 	deny unknown-clients;
 }
 
 group {
-	next-server 192.168.0.1;
+	next-server _NEXT_;
 	include "/etc/dhcp3/hosts.conf";
 }
 

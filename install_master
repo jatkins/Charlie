@@ -1,12 +1,24 @@
 #!/bin/bash
 
 #VARS
-declare -a NTP_SERVERS=('ntp1.vt.edu' 'ntp2.vt.edu' 'ntp3.vt.edu' 'ntp4.vt.ed')
+DNS_SERVERS='8.8.8.8 8.8.4.4' # Add as many as you would like, separate with a space.
+ROUTER='192.168.0.1' # The gateway that the cluster will use for internet access.
+DOMAIN_NAME='cluser.domain.tld' # The FQDN of the cluster will use.
+NTP_SERVERS='ntp1.vt.edu ntp2.vt.edu ntp3.vt.edu ntp4.vt.ed' # Same as DNS_SERVERS.
+NEXT_SERVER='192.168.0.1' # Address of the server that will be used to PXE boot the nodes for cloning.
 
 ###############################################################################
 
 apt-get -q update
 apt-get -qy upgrade
+cd /etc/dhcp3
+wget --no-check-certificates https://github.com/jatkins/Charlie/raw/master/config/master/dhcpd.conf.temp
+sed -e "s/_DNS_/$DNS_SERVERS/g" dhcpd.conf.temp > dhcpd.conf.temp
+sed -e "s/_ROUTER_/$ROUTER/g" dhcpd.conf.temp > dhcpd.conf.temp
+sed -e "s/_DOMAIN_NAME_/$DOMAIN_NAME/g" dhcpd.conf.temp > dhcpd.conf.temp
+sed -e "s/_NTP_/$NTP_SERVERS/g" dhcpd.conf.temp > dhcpd.conf.temp
+sed -e "s/_NEXT_/$NEXT_SERVER/g" dhcpd.conf.temp > dhcpd.conf
+rm dhcpd.conf.temp
 apt-get -qy install nfs-common nfs-kernel-server dhcp3-server 
 
 #slapd libnss-ldap libpam-ldap bind9
