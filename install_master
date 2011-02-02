@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #VARS
-DNS_SERVERS='8.8.8.8 8.8.4.4' # Add as many as you would like, separate with a space.
+DNS_SERVERS='8.8.8.8, 8.8.4.4' # Add as many as you would like, separate with a comma and a space.
 ROUTER='192.168.0.1' # The gateway that the cluster will use for internet access.
 DOMAIN_NAME='cluser.domain.tld' # The FQDN of the cluster will use.
 NTP_SERVER='192.168.0.1' # Address of the server that is running ntp for the nodes.
