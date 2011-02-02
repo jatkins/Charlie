@@ -20,6 +20,8 @@ sed -i "s/_NTP_/$NTP_SERVERS/g" dhcpd.conf.temp
 sed -i "s/_NEXT_/$NEXT_SERVER/g" dhcpd.conf.temp
 sed -i "s/_SUBNET_/$SUBNET/g" dhcpd.conf.temp
 mv dhcpd.conf.temp dhcpd.conf
+touch hosts.conf
+touch supporting_hosts.conf
 apt-get -qy install nfs-common nfs-kernel-server dhcp3-server 
 
 #slapd libnss-ldap libpam-ldap bind9
