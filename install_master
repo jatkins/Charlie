@@ -12,7 +12,7 @@ NEXT_SERVER='192.168.0.1' # Address of the server that will be used to PXE boot 
 apt-get -q update
 apt-get -qy upgrade
 cd /etc/dhcp3
-wget --no-check-certificates https://github.com/jatkins/Charlie/raw/master/config/master/dhcpd.conf.temp
+wget --no-check-certificate https://github.com/jatkins/Charlie/raw/master/config/master/dhcpd.conf.temp
 sed -e "s/_DNS_/$DNS_SERVERS/g" dhcpd.conf.temp > dhcpd.conf.temp
 sed -e "s/_ROUTER_/$ROUTER/g" dhcpd.conf.temp > dhcpd.conf.temp
 sed -e "s/_DOMAIN_NAME_/$DOMAIN_NAME/g" dhcpd.conf.temp > dhcpd.conf.temp
